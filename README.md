@@ -1,4 +1,4 @@
-🚀 Production-Ready Machine Learning Engineer Portfolio
+Production-Ready Machine Learning Engineer Portfolio
 Amazon Electronics Recommendation Engine
 This project demonstrates the core technical capability required for personalization systems at scale: building, deploying, and monitoring a low-latency recommendation engine.
 
