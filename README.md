@@ -74,14 +74,6 @@ Asynchronous Reliability
 
 The background task mechanism successfully handles job submission, state tracking, and result retrieval.
 
-Project 1: Lifestyle and Sleep Quality Predictor
-(Brief Summary for your foundational project)
-
-This project established a baseline for predictive modeling skills. It involved extensive data wrangling and the construction of a robust Scikit-learn pipeline to predict a numerical sleep quality score based on health and lifestyle features. The comparison between the simple Linear Regressor (R 
-2
- =0.95) and the optimized Random Forest Regressor (R 
-2
- =0.98) demonstrates a strong understanding of the complexity vs. performance trade-off.
 
 Repository Files
 
