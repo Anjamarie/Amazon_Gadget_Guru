@@ -1,99 +1,63 @@
-🚀 Production-Ready Machine Learning Engineer Portfolio
-Amazon Electronics Recommendation Engine
+# Production-Ready Machine Learning Engineer Portfolio
+## Amazon Electronics Recommendation Engine
+### Project Overview
 This project demonstrates the core technical capability required for personalization systems at scale: building, deploying, and monitoring a low-latency recommendation engine.
 
 The primary goal was to take the Matrix Factorization (SVD) model from concept to a production-ready microservice to prove MLOps proficiency.
 
-Methodology and Core Algorithms
+***
 
-Component
+### The "Why" 
+**Problem:** Recommendation models are often stuck in notebooks.
 
-Technology / Concept
 
-Significance
+**Solution:** Built a resilient microservice that handles matrix factorization at scale, utilizing BackgroundTasks to prevent API blocking during high-volume inference.
+***
 
-Data Filtering
+### Methodology and Core Algorithms
 
-Pandas, NumPy
+| Component | Technology | Concept |
+| :--- | :--- | :--- |
+| **Data Filtering** | `Pandas`, `NumPy` | Aggressively reduced data sparsity by filtering out users and items with fewer than 5 ratings/interactions, ensuring the model trains on meaningful user behavior. |
+| **Modeling Core** | Singular Value Decomposition (SVD), `surprise` Library | Implemented SVD to perform Matrix Factorization, learning user and item latent features to drive personalized predictions. |
+| **Model Packaging** | Joblib Serialization | Serialized the final trained model (recommender_model.joblib) for efficient loading into the production API, preventing the need for retraining on startup. |
+| **API Architecture** | FastAPI, Routers, BackgroundTasks| Designed a modular, scalable API structure capable of handling both synchronous (low-latency) and asynchronous (long-running) recommendation requests. |
 
-Aggressively reduced data sparsity by filtering out users and items with fewer than 5 ratings/interactions, ensuring the model trains on meaningful user behavior.
+***
 
-Modeling Core
+### MLOps 
+| Feature | Technology | Benefit |
+| :--- | :--- | :--- |
+| **Liveness Probes** | `/health/liveness` | Allows Kubernetes/Cloud Run to restart the container if it freezes. |
+| **Modeling Caching** | Lifespan Events | Prevents 500ms+ overhead by loading the .joblib into RAM exactly once. |
+| **Metrics** | `/v1/metrics` | Enables real-time monitoring of P99 latency and error rates. |
 
-Singular Value Decomposition (SVD), Surprise Library
 
-Implemented SVD to perform Matrix Factorization, learning user and item latent features to drive personalized predictions.
+***
 
-Model Packaging
 
-Joblib Serialization
+## Key Performance Metrics (SVD Model)
 
-Serialized the final trained model (recommender_model.joblib) for efficient loading into the production API, preventing the need for retraining on startup.
+| Metric | Value | Interpretation |
+| :--- | :--- | :--- |
+| **Mean RMSE** | 0.89 | Predicted ratings are off by < 0.9 points on a 5-point scale, indicating high accuracy. |
+| **Latency (P99)** | ~980ms | Provides near-real-time responses for synchronous requests (under 1 second). |
+| **Async Reliability** | 100% | BackgroundTask mechanism successfully manages job state and retrieval. |
 
-API Architecture
+## Repository Structure
 
-FastAPI, Routers, BackgroundTasks
+* **main.py**: Application entry point, lifespan management, and dependency injection.
+* **routers/**: Modular directory containing endpoint logic and shared state modules.
+* **recommender_model.joblib**: Serialized ML model artifact ready for production inference.
+* **assets/**: Visualizations, architecture diagrams, and static assets for documentation.
 
-Designed a modular, scalable API structure capable of handling both synchronous (low-latency) and asynchronous (long-running) recommendation requests.
 
-System Architecture and MLOps Observability
+***
 
-This service is structured as a resilient, single-responsibility microservice, demonstrating essential MLOps best practices:
 
-Model Caching: The heavy ML model is loaded once during the application's lifespan event, significantly reducing latency for every incoming request.
+### Conclusion & Future Work
 
-Asynchronous Processing: Long-running recommendation jobs (simulating complex matrix operations) are routed to BackgroundTasks and processed without blocking the main thread, maintaining API responsiveness.
+This project successfully transitioned a Matrix Factorization research concept into a resilient, asynchronous microservice. The system achieves high predictive accuracy (0.89 RMSE) while maintaining the low latency required for production user experiences. The limitations include system struggles to make recommendations for users who have zero history, the current model is static and would need to be re-trained to capture changes, and there is hardware constraints and the SVD matrix would need to be transitioned to a GPU-accelerated training or a distributed system. 
 
-Health & Readiness Probes: Dedicated endpoints (/health/liveness, /health/readiness) ensure the service and its critical dependency (the loaded ML model) are functioning before accepting production traffic.
-
-Structured Metrics: The dedicated /v1/metrics endpoint provides observability into latency, failure rates, and job volumes for external monitoring tools.
-
-Key Performance Metrics (SVD Model)
-
-Metric
-
-Value
-
-Interpretation
-
-Mean RMSE
-
-0.89
-
-The model's predicted rating is, on average, off by less than 0.9 points on a 5-point scale, indicating strong predictive accuracy.
-
-Latency (P99)
-
-~980ms
-
-The system provides near-real-time synchronization for fast requests (simulated latency for the sync path is under 1 second).
-
-Asynchronous Reliability
-
-100%
-
-The background task mechanism successfully handles job submission, state tracking, and result retrieval.
-
-Project 1: Lifestyle and Sleep Quality Predictor
-(Brief Summary for your foundational project)
-
-This project established a baseline for predictive modeling skills. It involved extensive data wrangling and the construction of a robust Scikit-learn pipeline to predict a numerical sleep quality score based on health and lifestyle features. The comparison between the simple Linear Regressor (R 
-2
- =0.95) and the optimized Random Forest Regressor (R 
-2
- =0.98) demonstrates a strong understanding of the complexity vs. performance trade-off.
-
-Repository Files
-
-main.py: Main application entry point and dependency management.
-
-routers/: Directory containing all endpoint logic and shared state modules.
-
-recommender_model.joblib: The final, serialized ML model artifact ready for deployment.
-
-assets/: Directory containing all visualization files for this README.
-
-Final Call to Action
-To run this application and test the endpoints, please follow the setup instructions in the contributing guide.
-
-View the complete analysis and model training code in the corresponding project file.
+---
+> **Note:** View the complete analysis and model training code in the [ML-core.ipynb](./ML-core.ipynb) file.
