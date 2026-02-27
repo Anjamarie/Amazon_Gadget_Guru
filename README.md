@@ -51,5 +51,13 @@ The primary goal was to take the Matrix Factorization (SVD) model from concept t
 * **recommender_model.joblib**: Serialized ML model artifact ready for production inference.
 * **assets/**: Visualizations, architecture diagrams, and static assets for documentation.
 
+
+***
+
+
+### Conclusion & Future Work
+
+This project successfully transitioned a Matrix Factorization research concept into a resilient, asynchronous microservice. The system achieves high predictive accuracy (0.89 RMSE) while maintaining the low latency required for production user experiences. The limitations include system struggles to make recommendations for users who have zero history, the current model is static and would need to be re-trained to capture changes, and there is hardware constraints and the SVD matrix would need to be transitioned to a GPU-accelerated training or a distributed system. 
+
 ---
 > **Note:** View the complete analysis and model training code in the [ML-core.ipynb](./ML-core.ipynb) file.
